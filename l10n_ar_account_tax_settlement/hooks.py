@@ -3,6 +3,7 @@ _logger = logging.getLogger(__name__)
 
 
 def l10n_ar_account_tax_settlement_post_init_hook(env):
+    return
     """ Al instalar este módulo (l10n_ar_account_tax_settlement), en caso de que existan compañías responsable inscripto argentinas y con plan de cuentas ya establecido entonces a los impuestos de retenciones de ganancias e iva les agregamos el código de impuesto correspondiente. También agregamos etiquetas a las repartition lines de impuestos de retenciones. """
 
     # verificamos que la compañía sea argentina, responsable inscripto y tenga plan de cuentas instalado

@@ -243,7 +243,7 @@ class AccountJournal(models.Model):
             if internal_type:
                 move = line.move_id
 
-            if internal_type and internal_type in ('invoice'):
+            if internal_type and internal_type == 'invoice':
                 # factura
                 content += '01' + line.l10n_latam_document_type_id.l10n_ar_letter
 
@@ -836,7 +836,7 @@ class AccountJournal(models.Model):
         line_nbr = 1
         for line in move_lines.filtered('payment_id'):
             alicuot_line = line.tax_line_id.get_partner_alicuot(
-                line.partner_id, line.date)
+                line.partner_id, line.date, line)
             if not alicuot_line:
                 raise ValidationError(_(
                     'No hay alicuota configurada en el partner '
@@ -1347,8 +1347,8 @@ class AccountJournal(models.Model):
                 if not alicuot_line:
                     raise ValidationError(
                     'No hay alicuota configurada en el partner '
-                    '"%s" (id: %s)') % (
-                        line.partner_id.name, line.partner_id.id)
+                    '"%s" (id: %s)' % (
+                        line.partner_id.name, line.partner_id.id))
 
                 content += str(line.tax_line_id.get_partner_alicuot(
                 line.partner_id, line.date).alicuota_retencion) + ','

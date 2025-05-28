@@ -462,7 +462,7 @@ class AccountJournal(models.Model):
                 es_percepcion = True
                 content = '2'
                 alicuot = alicuot_line.alicuota_percepcion
-            elif tax.l10n_ar_withholding_payment_type in ['customer', 'supplier']:
+            elif tax.l10n_ar_withholding_payment_type in ['customer', 'supplier'] or tax.type_tax_use in ['customer', 'supplier']:
                     # tax.withholding_type == 'partner_tax':
                 content = '1'
                 alicuot = alicuot_line.alicuota_retencion

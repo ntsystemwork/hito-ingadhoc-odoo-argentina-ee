@@ -100,7 +100,7 @@ class ResCompany(models.Model):
                 if afip_date == rate_date:
                     res.update({currency.name: (1.0 / rate, rate_date)})
                     _logger.log(25, "Currency %s %s %s", currency.name, rate_date, rate)
-                    _logger.info("💱 Tasa para %s (%s): %s ARS por 1 %s", currency.name, rate_date, round(rate, 4), currency.name)
+                    _logger.warning("💱 Tasa para %s (%s): %s ARS por 1 %s", currency.name, rate_date, round(rate, 4), currency.name)
                 else:
                     raise UserError("Returned Afip rate is not today's rate (%s, %s vs %s, %s)"
                                     % (afip_date.strftime("%A"), afip_date, rate_date.strftime("%A"), rate_date))

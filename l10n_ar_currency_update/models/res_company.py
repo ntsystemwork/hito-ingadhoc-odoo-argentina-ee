@@ -93,13 +93,14 @@ class ResCompany(models.Model):
             try:
                 # Obtain the currencies to be updated
                 _logger.log(25, "Connecting to AFIP to update the currency rates for %s", currency.name)
-
+                _logger.warning("🌐 Consultando AFIP para moneda %s (código AFIP: %s)", currency.name, currency.l10n_ar_afip_code)
                 # Do not pass company since we need to find the one that has certificate
                 afip_date, rate = currency._l10n_ar_get_afip_ws_currency_rate()
                 afip_date = datetime.strptime(afip_date, "%Y%m%d").date() + relativedelta(days=1)
                 if afip_date == rate_date:
                     res.update({currency.name: (1.0 / rate, rate_date)})
                     _logger.log(25, "Currency %s %s %s", currency.name, rate_date, rate)
+                    _logger.info("💱 Tasa para %s (%s): %s ARS por 1 %s", currency.name, rate_date, round(rate, 4), currency.name)
                 else:
                     raise UserError("Returned Afip rate is not today's rate (%s, %s vs %s, %s)"
                                     % (afip_date.strftime("%A"), afip_date, rate_date.strftime("%A"), rate_date))
@@ -107,6 +108,7 @@ class ResCompany(models.Model):
             except Exception as e:
                 self.env.company = env_company
                 _logger.log(25, "Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
+                _logger.warning("⚠️ No se pudo obtener la tasa de %s: %s", currency.name, str(e))
             else:
                 for company in self.filtered(lambda x: x.currency_provider == 'afip'):
                     company.l10n_ar_last_currency_sync_date = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
